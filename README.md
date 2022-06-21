@@ -1,3 +1,17 @@
+# Automatic doc generation
+Forked repository to automatically discover events and document them
+
+## environmental variables
+Names located in the .env-example file. EVENT_BUS_NAME, SCHEMA_REGISTRY_NAME, and REGION should be the values bellow (for sandbox). EVENT_BUS_NAME should be adjusted depending on the environment we are in.
+```
+export EVENT_BUS_NAME=SANDBOX-EventCentral
+export SCHEMA_REGISTRY_NAME=discovered-schemas
+export REGION=us-west-2
+export AWS_ACCESS_KEY_ID=
+export AWS_SECRET_ACCESS_KEY=
+export AWS_SESSION_TOKEN=
+```
+
 <div align="center">
 
 <h2>EventBridge Atlas 🗺</h2>
