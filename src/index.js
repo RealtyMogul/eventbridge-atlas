@@ -1,20 +1,15 @@
 require('dotenv').config({ path: path.resolve(process.cwd(), '.env') })
 
-import path from 'path'
-import { exit } from 'process'
-import yargs from 'yargs/yargs'
-import { hideBin } from 'yargs/helpers'
 import chalk from 'chalk'
 import fs from 'fs-extra'
+import path from 'path'
+import { exit } from 'process'
 
 import Registry from './models/Registry'
 
 import * as parsers from './parsers'
 import {
-  getTargetsForEventsOnEventBridge,
-  getAllSchemasAsJSONSchema,
-  hydrateSchemasWithAdditionalOpenAPIData,
-  getAllSchemas,
+  getAllSchemas, getAllSchemasAsJSONSchema, getTargetsForEventsOnEventBridge, hydrateSchemasWithAdditionalOpenAPIData, upload
 } from './utils/aws'
 
 const log = console.log
@@ -23,10 +18,8 @@ const exec = require('./utils/exec')
 
 const EVENT_BUS_NAME = process.env.EVENT_BUS_NAME
 const REGSITRY_NAME = process.env.SCHEMA_REGISTRY_NAME
-
 const getParser = () => {
-  const argv = yargs(hideBin(process.argv)).argv
-  const { format } = argv
+  const format = 'asyncapi'
   const listOfParsers = parsers.default
   if (!listOfParsers[format]) {
     log(chalk.red('Please provider a valid parser'))
@@ -40,6 +33,8 @@ const getParser = () => {
 }
 
 const init = async () => {
+  log("uploading file")
+  // upload()
   const { init, build, wrapup, format, ...args } = getParser()
 
   log(`[1/3] 🔎 Fetching data from AWS...`)
@@ -92,7 +87,9 @@ const init = async () => {
       // console.log(`Running wrapup scripts...`)
       await wrapup()
     }
-
+    const htmlDir = path.join(process.cwd(), `./docs-html/${format}`)
+    var x = upload(htmlDir, 'index.html')
+    log(x)
     log(
       `
 

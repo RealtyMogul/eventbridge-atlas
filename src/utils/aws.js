@@ -1,7 +1,27 @@
+
 const path = require('path')
 const { EventBridge } = require('@aws-sdk/client-eventbridge')
 const { Schemas } = require('@aws-sdk/client-schemas')
 require('dotenv').config({ path: path.resolve(process.cwd(), '.env') })
+const AWS = require("aws-sdk")
+const s3 = new AWS.S3()
+const fs = require('fs')
+
+export const upload = async (dir, file_name) => {
+  const params = {
+    ACL: "public-read",
+    Body: await fs.readFileSync(path.join(dir, file_name)),
+    ContentType: "text/html",
+    Bucket: "sandbox-realtymogul-eventbridge-atlas-event-docs",
+    Key: file_name
+  }
+  return await new Promise((resolve, reject) => {
+    s3.putObject(params, (err, results) => {
+      if (err) reject(err)
+      else resolve(results)
+    })
+  })
+}
 
 const schemas = new Schemas({
   region: process.env.REGION,
