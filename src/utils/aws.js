@@ -2,13 +2,30 @@ const path = require('path')
 const { EventBridge } = require('@aws-sdk/client-eventbridge')
 const { Schemas } = require('@aws-sdk/client-schemas')
 require('dotenv').config({ path: path.resolve(process.cwd(), '.env') })
-
+const AWS = require("aws-sdk")
+const s3 = new AWS.S3()
+const fs = require('fs')
 const schemas = new Schemas({
   region: process.env.REGION,
 })
 const eventbridge = new EventBridge({
   region: process.env.REGION,
 })
+export const upload = async (dir, file_name, bucket_name) => {
+  const params = {
+    ACL: "public-read",
+    Body: await fs.readFileSync(path.join(dir, file_name)),
+    ContentType: "text/html",
+    Bucket: bucket_name,
+    Key: file_name
+  }
+  return await new Promise((resolve, reject) => {
+    s3.putObject(params, (err, results) => {
+      if (err) reject(err)
+      else resolve(results)
+    })
+  })
+}
 
 export const getTargetsForEventsOnEventBridge = async (eventBusName) => {
   const targetsForEvents = await eventbridge.listRules({ EventBusName: eventBusName })

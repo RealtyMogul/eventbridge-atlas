@@ -15,14 +15,17 @@ import {
   getAllSchemasAsJSONSchema,
   hydrateSchemasWithAdditionalOpenAPIData,
   getAllSchemas,
+  upload
 } from './utils/aws'
 
 const log = console.log
 
-const exec = require('./utils/exec')
+const Generator = require('@asyncapi/generator')
 
 const EVENT_BUS_NAME = process.env.EVENT_BUS_NAME
 const REGSITRY_NAME = process.env.SCHEMA_REGISTRY_NAME
+const BUCKET_NAME = process.env.BUCKET_NAME
+
 
 const getParser = () => {
   const argv = yargs(hideBin(process.argv)).argv
@@ -86,13 +89,22 @@ const init = async () => {
     )
 
     // Use tools to build the documentation.
-    await build({ exec, buildDir })
+    // await build({ exec, buildDir })
+    const generator = new Generator('@asyncapi/html-template', buildDir, { forceWrite: true })
+    // generator.generateFromString(eventsYml)
+    try {
+      log(generator)
+      await generator.generateFromFile(path.join(buildDir, '/events.yml'))
+    } catch (error) {
+      throw error
 
-    if (wrapup) {
-      // console.log(`Running wrapup scripts...`)
-      await wrapup()
     }
-
+    const cssDir = path.join(path.join(buildDir,'css'))
+    const jsDir = path.join(path.join(buildDir,'js'))
+    upload(buildDir, 'index.html', BUCKET_NAME)
+    upload(cssDir, 'asyncapi.min.css', BUCKET_NAME)
+    upload(cssDir, 'global.min.css', BUCKET_NAME)
+    upload(jsDir, 'asyncapi-ui.min.js', BUCKET_NAME)
     log(
       `
 
