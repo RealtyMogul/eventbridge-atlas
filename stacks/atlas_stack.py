@@ -66,6 +66,6 @@ class Stacks(Stage):
         build_pipeline=CICDPipeline(self, f"{props['project']}BuildPipeline", atlas.outputs)
         build_pipeline.add_dependency(atlas, "need to create the repo before CICD pipeline executes")
 
-
+        tag(cluster, props['environment'])
         tag(atlas, props['environment'])
         tag(build_pipeline, props['environment'])
