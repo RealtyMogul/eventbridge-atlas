@@ -93,7 +93,6 @@ const init = async () => {
     const generator = new Generator('@asyncapi/html-template', buildDir, { forceWrite: true })
     // generator.generateFromString(eventsYml)
     try {
-      log(generator)
       await generator.generateFromFile(path.join(buildDir, '/events.yml'))
     } catch (error) {
       throw error
