@@ -51,10 +51,11 @@ class FargateService(Stack):
                 },
             ),
         )
-        fargate_service = ecs.FargateService(self, 'EventBridgeAtlasFargateService', task_definition=fargate_task.task_definition,cluster=props['cluster'])
-        fargate_service.task_definition.execution_role.add_managed_policy(iam.ManagedPolicy.from_aws_managed_policy_name('AmazonEC2ContainerRegistryPowerUser'))
-
+        #granting permisions
+        fargate_task.task_definition.execution_role.add_managed_policy(iam.ManagedPolicy.from_aws_managed_policy_name('AmazonEC2ContainerRegistryPowerUser'))
         s3bucket.grant_read_write(fargate_task.task_definition.execution_role)
+        
+        fargate_service = ecs.FargateService(self, 'EventBridgeAtlasFargateService', task_definition=fargate_task.task_definition,cluster=props['cluster'])
         self.output_props = props.copy()
         self.output_props['ecs_service']=fargate_service
 
