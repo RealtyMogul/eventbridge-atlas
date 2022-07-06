@@ -17,7 +17,7 @@ from stacks.atlas_stack import accountStacks
 deploy_environments = [SANDBOX, 
                         # DEV, 
                         # QA, 
-                        PROD, 
+                        #PROD, 
                         # LEGACY
                         ]
 

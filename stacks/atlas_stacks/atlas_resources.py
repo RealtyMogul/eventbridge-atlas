@@ -34,8 +34,10 @@ class FargateService(Stack):
 
         vpcid = ssm.StringParameter.value_from_lookup(self, parameter_name="VPC-ID")
         importedVPC = ec2.Vpc.from_lookup(self, "importedvpc", vpc_id=vpcid)
+        cluster= ecs.Cluster(self, "EventBridgeAtlasCluster",
+            vpc=importedVPC)
         repository = ecr.Repository(self, "Repository",
-            repository_name=f"{props['environment'].lower()}-adminpanelrepo")
+            repository_name=f"{props['environment'].lower()}-eventbridge-atlas-repo")
         s3bucket = s3.Bucket(
             self,
             f"{props['project']}-{props['environment']}-bucket",
@@ -44,11 +46,10 @@ class FargateService(Stack):
         fargate_task = aws_cdk.aws_ecs_patterns.ScheduledFargateTask(
             self,
             "EventBridgeAtlasFargate",
-            schedule=Schedule.cron(hour=12, minute=0),
-            vpc=importedVPC,
+            schedule=Schedule.cron(day='*',month='*',hour='*', minute='0'),
+            cluster=cluster,
             scheduled_fargate_task_image_options=ecs_patterns.ScheduledFargateTaskImageOptions(
                 image=ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample"),
-                container_name=f"{props['environment'].lower()}-eventbridgeatlas",
                 environment={
                     "EVENT_BUS_NAME": f"{props['environment']}-EventCentral",
                     "SCHEMA_REGISTRY_NAME": "discovered-schemas",
@@ -57,12 +58,12 @@ class FargateService(Stack):
                 },
             ),
         )
+        fargate_service = ecs.FargateService(self, 'EventBridgeAtlasFargateService', task_definition=fargate_task.task_definition,cluster=cluster)
 
-        s3bucket.grant_read_write(fargate_task)
-
+        s3bucket.grant_read_write(fargate_task.task_definition.execution_role)
         self.output_props = props.copy()
         self.output_props['ecr_repo'] = repository
-        self.output_props['ecs_task']=fargate_task.task
+        self.output_props['ecs_service']=fargate_service
 
     # pass objects to another stack
     @property

@@ -78,7 +78,7 @@ class CICDPipeline(Stack):
             actions=[
                 codepipeline_actions.EcsDeployAction(
                     action_name="EventBridgeAtlasDeployment",
-                    service=props['ecs_task'],
+                    service=props['ecs_service'],
                     image_file=build_output.at_path("imagedefinitions.json")
                 )
             ]
