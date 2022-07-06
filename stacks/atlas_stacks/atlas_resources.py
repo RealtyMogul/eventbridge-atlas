@@ -40,7 +40,7 @@ class FargateService(Stack):
             vpc=importedVPC)
         repository = ecr.Repository(self, "Repository",
             repository_name=f"{props['environment'].lower()}-eventbridge-atlas-repo")
-        image = DockerImageAsset(self,"EventBridgeAtlasImage",directory= str(directory=Path.cwd().parent.parent))
+        image = DockerImageAsset(self,"EventBridgeAtlasImage",directory= str(Path.cwd().parent.parent))
         s3bucket = s3.Bucket(
             self,
             f"{props['project']}-{props['environment']}-bucket",
