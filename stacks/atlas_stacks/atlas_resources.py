@@ -60,6 +60,7 @@ class FargateService(Stack):
         )
         fargate_service = ecs.FargateService(self, 'EventBridgeAtlasFargateService', task_definition=fargate_task.task_definition,cluster=cluster)
 
+        s3bucket.grant_read_write(fargate_task.task_definition.execution_role)
         self.output_props = props.copy()
         self.output_props['ecr_repo'] = repository
         self.output_props['ecs_service']=fargate_service
