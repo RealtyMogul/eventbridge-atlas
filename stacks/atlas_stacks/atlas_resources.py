@@ -16,9 +16,11 @@ from aws_cdk import aws_lambda as aws_lambda
 from aws_cdk import aws_logs as aws_logs
 from aws_cdk import aws_s3 as s3
 from aws_cdk import aws_ssm as ssm
+from aws_cdk.aws_ecr_assets import DockerImageAsset
 from aws_cdk.aws_applicationautoscaling import Schedule
 import aws_cdk
 from constructs import Construct
+from pathlib import Path
 
 
 class FargateService(Stack):
@@ -38,6 +40,7 @@ class FargateService(Stack):
             vpc=importedVPC)
         repository = ecr.Repository(self, "Repository",
             repository_name=f"{props['environment'].lower()}-eventbridge-atlas-repo")
+        image = DockerImageAsset(self,"EventBridgeAtlasImage",directory=Path.cwd().parent.parent)
         s3bucket = s3.Bucket(
             self,
             f"{props['project']}-{props['environment']}-bucket",
@@ -64,6 +67,7 @@ class FargateService(Stack):
         self.output_props = props.copy()
         self.output_props['ecr_repo'] = repository
         self.output_props['ecs_service']=fargate_service
+        self.output_props['image']=image
 
     # pass objects to another stack
     @property

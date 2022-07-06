@@ -80,7 +80,7 @@ class CICDPipeline(Stack):
                     action_name="EventBridgeAtlasDeployment",
                     service=props['ecs_service'],
                     image_file=build_output.at_path("imagedefinitions.json")
-                )
+                ),
             ]
         )
 
