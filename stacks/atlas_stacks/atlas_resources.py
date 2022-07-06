@@ -8,6 +8,7 @@ from aws_cdk import (
     RemovalPolicy,
     Stack,
     aws_ecs_patterns as ecs_patterns,
+    aws_iam as iam,
 )
 from aws_cdk import aws_ec2 as ec2
 from aws_cdk import aws_ecs as ecs
@@ -51,6 +52,7 @@ class FargateService(Stack):
             ),
         )
         fargate_service = ecs.FargateService(self, 'EventBridgeAtlasFargateService', task_definition=fargate_task.task_definition,cluster=props['cluster'])
+        fargate_service.task_definition.execution_role.add_managed_policy(iam.ManagedPolicy.from_aws_managed_policy_name('AmazonEC2ContainerRegistryPowerUser'))
 
         s3bucket.grant_read_write(fargate_task.task_definition.execution_role)
         self.output_props = props.copy()
