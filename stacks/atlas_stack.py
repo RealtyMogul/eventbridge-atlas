@@ -60,7 +60,7 @@ class Stacks(Stage):
         super().__init__(scope, id, env=env, outdir=outdir)
 
         """Stacks"""
-        cluster = ecsCluster(self, "EventBridgeCluster")
+        cluster = ecsCluster(self, "EventBridgeCluster",props=props)
         atlas = FargateService(self, f"{props['project']}Task", cluster.outputs)
         atlas.add_dependency(cluster)
         build_pipeline=CICDPipeline(self, f"{props['project']}BuildPipeline", atlas.outputs)
