@@ -6,6 +6,7 @@ from lib.tagging import tag
 
 from stacks.atlas_stacks.atlas_resources import FargateService
 from stacks.atlas_stacks.code_pipeline import CICDPipeline
+from stacks.atlas_stacks.ecs_cluster import ecsCluster
 
 
 class accountStacks(Stack):
@@ -59,7 +60,9 @@ class Stacks(Stage):
         super().__init__(scope, id, env=env, outdir=outdir)
 
         """Stacks"""
-        atlas = FargateService(self, f"{props['project']}Task", props)
+        cluster = ecsCluster(self, "EventBridgeCluster")
+        atlas = FargateService(self, f"{props['project']}Task", cluster.outputs)
+        atlas.add_dependency(cluster)
         build_pipeline=CICDPipeline(self, f"{props['project']}BuildPipeline", atlas.outputs)
         build_pipeline.add_dependency(atlas, "need to create the repo before CICD pipeline executes")
 

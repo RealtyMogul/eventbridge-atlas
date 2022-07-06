@@ -27,11 +27,11 @@ class ecsCluster(Stack):
         cluster= ecs.Cluster(self, "EventBridgeAtlasCluster",
             vpc=importedVPC)
         repository = ecr.Repository(self, "Repository",
-            repository_name=f"{props['environment'].lower()}-adminpanelrepo")
+            repository_name=f"{props['environment'].lower()}-eventbridge-atlas-repo")
 
         self.output_props = props.copy()
         self.output_props['cluster'] = cluster
-        self.output_props['ecrRepo'] = repository
+        self.output_props['ecr_repo'] = repository
 
     # pass objects to another stack
     @property

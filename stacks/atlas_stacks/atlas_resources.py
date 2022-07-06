@@ -30,14 +30,6 @@ class FargateService(Stack):
 
         self.output_props = props.copy()
 
-        # https://eventbus-cdk.workshop.aws/en/04-api-gateway-service-integrations/01-rest-api/rest-apis.html
-
-        vpcid = ssm.StringParameter.value_from_lookup(self, parameter_name="VPC-ID")
-        importedVPC = ec2.Vpc.from_lookup(self, "importedvpc", vpc_id=vpcid)
-        cluster= ecs.Cluster(self, "EventBridgeAtlasCluster",
-            vpc=importedVPC)
-        repository = ecr.Repository(self, "Repository",
-            repository_name=f"{props['environment'].lower()}-eventbridge-atlas-repo")
         s3bucket = s3.Bucket(
             self,
             f"{props['project']}-{props['environment']}-bucket",
@@ -47,7 +39,7 @@ class FargateService(Stack):
             self,
             "EventBridgeAtlasFargate",
             schedule=Schedule.cron(day='*',month='*',hour='*', minute='0'),
-            cluster=cluster,
+            cluster=props['cluster'],
             scheduled_fargate_task_image_options=ecs_patterns.ScheduledFargateTaskImageOptions(
                 image=ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample"),
                 environment={
@@ -58,11 +50,10 @@ class FargateService(Stack):
                 },
             ),
         )
-        fargate_service = ecs.FargateService(self, 'EventBridgeAtlasFargateService', task_definition=fargate_task.task_definition,cluster=cluster)
+        fargate_service = ecs.FargateService(self, 'EventBridgeAtlasFargateService', task_definition=fargate_task.task_definition,cluster=props['cluster'])
 
         s3bucket.grant_read_write(fargate_task.task_definition.execution_role)
         self.output_props = props.copy()
-        self.output_props['ecr_repo'] = repository
         self.output_props['ecs_service']=fargate_service
 
     # pass objects to another stack
