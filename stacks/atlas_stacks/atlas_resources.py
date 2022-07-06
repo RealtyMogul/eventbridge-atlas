@@ -40,7 +40,6 @@ class FargateService(Stack):
             vpc=importedVPC)
         repository = ecr.Repository(self, "Repository",
             repository_name=f"{props['environment'].lower()}-eventbridge-atlas-repo")
-        image = DockerImageAsset(self,"EventBridgeAtlasImage",directory=Path.cwd().parent.parent)
         s3bucket = s3.Bucket(
             self,
             f"{props['project']}-{props['environment']}-bucket",
@@ -67,7 +66,6 @@ class FargateService(Stack):
         self.output_props = props.copy()
         self.output_props['ecr_repo'] = repository
         self.output_props['ecs_service']=fargate_service
-        self.output_props['image']=image
 
     # pass objects to another stack
     @property
