@@ -8,5 +8,4 @@ WORKDIR /app
 RUN npm install
 RUN apk update && apk add --no-cache chromium
 RUN apk add --no-cache bash
-CMD ["npm", "install"]
-# CMD ["npm", "run", "build:asyncapi"]
+CMD ["npm", "run", "build:asyncapi"]
