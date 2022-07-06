@@ -24,6 +24,7 @@ class ecsCluster(Stack):
         importedVPC = ec2.Vpc.from_lookup(self, "importedvpc", vpc_id=vpcid)
         # -----------------------------
 
+        #creates cluster and repository
         cluster= ecs.Cluster(self, "EventBridgeAtlasCluster",
             vpc=importedVPC)
         repository = ecr.Repository(self, "Repository",
