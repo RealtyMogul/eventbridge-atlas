@@ -4,9 +4,8 @@ from aws_cdk import pipelines as pipelines
 from constructs import Construct
 from lib.tagging import tag
 
-from stacks.atlas_stacks.atlas_resources import eventBridgeAtlas
-from stacks.monitoring_stacks.app_insights import applicationInsights
-from stacks.monitoring_stacks.resource_group import resourceGroup
+from stacks.atlas_stacks.atlas_resources import FargateService
+from stacks.atlas_stacks.code_pipeline import CICDPipeline
 
 
 class accountStacks(Stack):
@@ -61,11 +60,10 @@ class Stacks(Stage):
         super().__init__(scope, id, env=env, outdir=outdir)
 
         """Stacks"""
-        atlas = eventBridgeAtlas(self, f"{props['project']}-atlas", props)
+        atlas = FargateService(self, f"{props['project']}Task", props)
+        build_pipeline=CICDPipeline(self, f"{props['project']}BuildPipeline", atlas.outputs)
+        build_pipeline.add_dependency(atlas, "need to create the repo before CICD pipeline executes")
 
-        """Helper Stacks for Monitoring"""
-        resource_group = resourceGroup(self, f"{props['project']}-ResourceGruop", props)
-        app_insights = applicationInsights(self, f"{props['project']}-ApplicationInsights", props)
-        app_insights.add_dependency(resource_group)
 
         tag(atlas, props['environment'])
+        tag(build_pipeline, props['environment'])

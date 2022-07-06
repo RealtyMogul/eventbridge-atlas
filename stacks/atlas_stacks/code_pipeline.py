@@ -11,7 +11,7 @@ from aws_cdk import (
 from aws_cdk.aws_ecr import Repository
 from constructs import Construct
 
-class cicd_pipeline(Stack):
+class CICDPipeline(Stack):
 
     def __init__(self, scope: Construct, id: str, props, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
