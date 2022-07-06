@@ -40,6 +40,7 @@ class FargateService(Stack):
             vpc=importedVPC)
         repository = ecr.Repository(self, "Repository",
             repository_name=f"{props['environment'].lower()}-eventbridge-atlas-repo")
+        image = DockerImageAsset(self,"EventBridgeAtlasImage",str(directory=Path.cwd().parent.parent))
         s3bucket = s3.Bucket(
             self,
             f"{props['project']}-{props['environment']}-bucket",
@@ -51,7 +52,7 @@ class FargateService(Stack):
             schedule=Schedule.cron(day='*',month='*',hour='*', minute='0'),
             cluster=cluster,
             scheduled_fargate_task_image_options=ecs_patterns.ScheduledFargateTaskImageOptions(
-                image=ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample"),
+                image=image,
                 environment={
                     "EVENT_BUS_NAME": f"{props['environment']}-EventCentral",
                     "SCHEMA_REGISTRY_NAME": "discovered-schemas",
@@ -66,6 +67,7 @@ class FargateService(Stack):
         self.output_props = props.copy()
         self.output_props['ecr_repo'] = repository
         self.output_props['ecs_service']=fargate_service
+        self.output_props['image']=image
 
     # pass objects to another stack
     @property

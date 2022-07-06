@@ -28,7 +28,6 @@ class accountStacks(Stack):
                 ),
                 commands=["pip install -r requirements.txt", 
                           "npm install -g aws-cdk", 
-                          "npm install --save-dev esbuild@0",
                           "cdk synth"]
             ),
             docker_enabled_for_synth=True
