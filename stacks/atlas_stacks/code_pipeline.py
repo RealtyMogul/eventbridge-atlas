@@ -83,8 +83,8 @@ class CICDPipeline(Stack):
                 codepipeline_actions.EcsDeployAction(
                     action_name="EventBridgeAtlasDeployment",
                     service=props['ecs_service'],
-                    input=build_output
-                    # image_file=build_output.at_path("imagedefinitions.json")
+                    input=build_output,
+                    image_file=build_output.at_path("imagedefinitions.json")
                 ),
             ]
         )
