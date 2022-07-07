@@ -1,16 +1,10 @@
-from importlib import resources
-import json
-import os
-from os import name
-import this
 from aws_cdk import (
-    Stack, CfnOutput, Duration, Fn,
+    Stack,
     aws_ecs as ecs,
     aws_ssm as ssm,
     aws_ec2 as ec2,
     aws_ecr as ecr
 )
-from aws_cdk.aws_secretsmanager import ResourcePolicy
 from constructs import Construct
 
 class ecsCluster(Stack):
