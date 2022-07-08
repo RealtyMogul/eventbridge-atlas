@@ -1,6 +1,12 @@
 # Automatic doc generation
 Forked repository to automatically discover events and document them
 
+##
+
+We are using fargate in this project to do run a upload the apiasync docs. See diagram below.
+
+![diagram](diagram.png)
+
 ## environmental variables
 Names located in the .env-example file. EVENT_BUS_NAME, SCHEMA_REGISTRY_NAME, and REGION should be the values bellow (for sandbox). EVENT_BUS_NAME should be adjusted depending on the environment we are in.
 ```

@@ -1,0 +1,325 @@
+digraph "Diagram" {
+  splines = "ortho";
+  pad = "1.0";
+  nodesep = "0.60";
+  ranksep = "0.75";
+  fontname = "Sans-Serif";
+  fontsize = "15";
+  dpi = "200";
+  rankdir = "BT";
+  compound = "true";
+  fontcolor = "#222222";
+  edge [
+    color = "#D5871488",
+    penwidth = 2,
+    arrowhead = "dot",
+    arrowtail = "dot",
+  ];
+  node [
+    shape = "box",
+    style = "rounded",
+    fixedsize = true,
+    width = 1.7,
+    height = 1.7,
+    labelloc = "c",
+    imagescale = true,
+    fontname = "Sans-Serif",
+    fontsize = 8,
+    margin = 8,
+  ];
+  subgraph "Eventbridge-Atlas-SANDBOX" {
+    subgraph "cluster-SubGraph.Eventbridge-Atlas-SANDBOX" {
+      graph [
+        label = "Eventbridge-Atlas-SANDBOX",
+        labelloc = "b",
+        labeljust = "l",
+        margin = "10",
+        fontsize = "16",
+        penwidth = "2",
+        pencolor = "#888888",
+        style = "filled,rounded",
+        fillcolor = "#e4e4e4",
+      ];
+      subgraph "cluster-SubGraph.DeploymentPipeline-SANDBOX" {
+        graph [
+          label = "DeploymentPipeline-SANDBOX",
+          labelloc = "b",
+          labeljust = "l",
+          margin = "10",
+          fontsize = "16",
+          penwidth = "2",
+          pencolor = "#888888",
+          style = "filled,rounded",
+          fillcolor = "#d6d6d6",
+        ];
+        "Eventbridge-Atlas-SANDBOX/DeploymentPipeline-SANDBOX/Pipeline" [
+          label = " Pipeline",
+          fontsize = 12,
+          image = "/opt/homebrew/lib/node_modules/cdk-dia/icons/aws/Service/Arch_Developer- Tools/64/Arch_AWS-CodePipeline_64@5x.png",
+          imagescale = "true",
+          imagepos = "tc",
+          penwidth = "0",
+          shape = "node",
+          fixedsize = "true",
+          labelloc = "b",
+          width = 1.2,
+          height = 1.466,
+        ];
+        "Eventbridge-Atlas-SANDBOX/DeploymentPipeline-SANDBOX/CodeBuildActionRole" [
+          label = " CodeBuildActionRole",
+          fontsize = 12,
+          image = "/opt/homebrew/lib/node_modules/cdk-dia/icons/aws/Service/Arch_Security-Identity-Compliance/64/Arch_AWS-Identity-and-Access-Management_64@5x.png",
+          imagescale = "true",
+          imagepos = "tc",
+          penwidth = "0",
+          shape = "node",
+          fixedsize = "true",
+          labelloc = "b",
+          width = 1.2,
+          height = 1.466,
+        ];
+        "Eventbridge-Atlas-SANDBOX/DeploymentPipeline-SANDBOX/UpdatePipeline/SelfMutation" [
+          label = " SelfMutation",
+          fontsize = 12,
+          image = "/opt/homebrew/lib/node_modules/cdk-dia/icons/aws/Service/Arch_Developer- Tools/64/Arch_Amazon-CodeBuild_64@5x.png",
+          imagescale = "true",
+          imagepos = "tc",
+          penwidth = "0",
+          shape = "node",
+          fixedsize = "true",
+          labelloc = "b",
+          width = 1.2,
+          height = 1.466,
+        ];
+      }
+      subgraph "cluster-SubGraph.SANDBOX" {
+        graph [
+          label = "SANDBOX",
+          labelloc = "b",
+          labeljust = "l",
+          margin = "10",
+          fontsize = "16",
+          penwidth = "2",
+          pencolor = "#888888",
+          style = "filled,rounded",
+          fillcolor = "#d6d6d6",
+        ];
+        subgraph "cluster-SubGraph.EventBridgeCluster" {
+          graph [
+            label = "EventBridgeCluster",
+            labelloc = "b",
+            labeljust = "l",
+            margin = "10",
+            fontsize = "16",
+            penwidth = "2",
+            pencolor = "#888888",
+            style = "filled,rounded",
+            fillcolor = "#c7c7c7",
+          ];
+          "Eventbridge-Atlas-SANDBOX/SANDBOX/EventBridgeCluster/EventBridgeAtlasCluster" [
+            label = "\nEventBridgeAtlasClust",
+            fontsize = 12,
+            image = "/opt/homebrew/lib/node_modules/cdk-dia/icons/aws/Service/Arch_Compute/64/Arch_Amazon-Elastic-Container-Service_64@5x.png",
+            imagescale = "true",
+            imagepos = "tc",
+            penwidth = "0",
+            shape = "node",
+            fixedsize = "true",
+            labelloc = "b",
+            width = 2,
+            height = 2.4819999999999998,
+          ];
+          "Eventbridge-Atlas-SANDBOX/SANDBOX/EventBridgeCluster/Repository" [
+            label = " Repository",
+            fontsize = 12,
+            image = "/opt/homebrew/lib/node_modules/cdk-dia/icons/aws/Service/Arch_Compute/64/Arch_Amazon-Elastic-Container-Registry_64@5x.png",
+            imagescale = "true",
+            imagepos = "tc",
+            penwidth = "0",
+            shape = "node",
+            fixedsize = "true",
+            labelloc = "b",
+            width = 1.2,
+            height = 1.466,
+          ];
+        }
+        subgraph "cluster-SubGraph.Eventbridge-AtlasTask" {
+          graph [
+            label = "Eventbridge-AtlasTask",
+            labelloc = "b",
+            labeljust = "l",
+            margin = "10",
+            fontsize = "16",
+            penwidth = "2",
+            pencolor = "#888888",
+            style = "filled,rounded",
+            fillcolor = "#c7c7c7",
+          ];
+          "Eventbridge-Atlas-SANDBOX/SANDBOX/Eventbridge-AtlasTask/Eventbridge-Atlas-SANDBOX-bucket" [
+            label = " Eventbridge Atlas\nSANDBOX bucket",
+            fontsize = 12,
+            image = "/opt/homebrew/lib/node_modules/cdk-dia/icons/aws/Service/Arch_Storage/64/Arch_Amazon-S3-Standard_64@5x.png",
+            imagescale = "true",
+            imagepos = "tc",
+            penwidth = "0",
+            shape = "node",
+            fixedsize = "true",
+            labelloc = "b",
+            width = 2,
+            height = 2.4819999999999998,
+          ];
+          subgraph "cluster-SubGraph.EventBridgeAtlasFargate" {
+            graph [
+              label = "EventBridgeAtlasFargate",
+              labelloc = "b",
+              labeljust = "l",
+              margin = "10",
+              fontsize = "16",
+              penwidth = "2",
+              pencolor = "#888888",
+              style = "filled,rounded",
+              fillcolor = "#b9b9b9",
+            ];
+            "Eventbridge-Atlas-SANDBOX/SANDBOX/Eventbridge-AtlasTask/EventBridgeAtlasFargate/ScheduledEventRule" [
+              label = " ScheduledEventRule",
+              fontsize = 12,
+              image = "/opt/homebrew/lib/node_modules/cdk-dia/icons/aws/Service/Arch_App-Integration/Arch_64/Arch_Amazon-EventBridge_64@5x.png",
+              imagescale = "true",
+              imagepos = "tc",
+              penwidth = "0",
+              shape = "node",
+              fixedsize = "true",
+              labelloc = "b",
+              width = 1.2,
+              height = 1.466,
+            ];
+            "Eventbridge-Atlas-SANDBOX/SANDBOX/Eventbridge-AtlasTask/EventBridgeAtlasFargate/ScheduledTaskDef" [
+              label = " ScheduledTaskDef",
+              fontsize = 12,
+              image = "/opt/homebrew/lib/node_modules/cdk-dia/icons/aws/Resource/Res_Containers/Res_48_Dark/Res_Amazon-Elastic-Container-Service_Task_48_Dark_gen.png",
+              imagescale = "true",
+              imagepos = "tc",
+              penwidth = "0",
+              shape = "node",
+              fixedsize = "true",
+              labelloc = "b",
+              width = 2,
+              height = 2.266,
+            ];
+          }
+          subgraph "cluster-SubGraph.EventBridgeAtlasFargateService" {
+            graph [
+              label = "EventBridgeAtlasFargateService",
+              labelloc = "b",
+              labeljust = "l",
+              margin = "10",
+              fontsize = "16",
+              penwidth = "2",
+              pencolor = "#888888",
+              style = "filled,rounded",
+              fillcolor = "#b9b9b9",
+            ];
+            "Eventbridge-Atlas-SANDBOX/SANDBOX/Eventbridge-AtlasTask/EventBridgeAtlasFargateService/Service" [
+              label = " ECS Service Service",
+              fontsize = 12,
+              image = "/opt/homebrew/lib/node_modules/cdk-dia/icons/aws/Resource/Res_Containers/Res_48_Dark/Res_Amazon-Elastic-Container-Service_Service_48_Dark_gen.png",
+              imagescale = "true",
+              imagepos = "tc",
+              penwidth = "0",
+              shape = "node",
+              fixedsize = "true",
+              labelloc = "b",
+              width = 2,
+              height = 2.266,
+            ];
+            "Eventbridge-Atlas-SANDBOX/SANDBOX/Eventbridge-AtlasTask/EventBridgeAtlasFargateService/SecurityGroup" [
+              label = " SecurityGroup",
+              fontsize = 12,
+              image = "/opt/homebrew/lib/node_modules/cdk-dia/icons/aws/security_group.png",
+              imagescale = "true",
+              imagepos = "tc",
+              penwidth = "0",
+              shape = "node",
+              fixedsize = "true",
+              labelloc = "b",
+              width = 2,
+              height = 2.266,
+            ];
+          }
+        }
+        subgraph "cluster-SubGraph.Eventbridge-AtlasBuildPipeline" {
+          graph [
+            label = "Eventbridge-AtlasBuildPipeline",
+            labelloc = "b",
+            labeljust = "l",
+            margin = "10",
+            fontsize = "16",
+            penwidth = "2",
+            pencolor = "#888888",
+            style = "filled,rounded",
+            fillcolor = "#c7c7c7",
+          ];
+          "Eventbridge-Atlas-SANDBOX/SANDBOX/Eventbridge-AtlasBuildPipeline/SANDBOX-EventBridgeAtlasBuildPipeline" [
+            label = " SANDBOX\nEventBridgeAtlasBuild",
+            fontsize = 12,
+            image = "/opt/homebrew/lib/node_modules/cdk-dia/icons/aws/Service/Arch_Developer- Tools/64/Arch_AWS-CodePipeline_64@5x.png",
+            imagescale = "true",
+            imagepos = "tc",
+            penwidth = "0",
+            shape = "node",
+            fixedsize = "true",
+            labelloc = "b",
+            width = 1.2,
+            height = 1.682,
+          ];
+          "Eventbridge-Atlas-SANDBOX/SANDBOX/Eventbridge-AtlasBuildPipeline/SANDBOX-EventBridgeAtlasBuildProject" [
+            label = " SANDBOX\nEventBridgeAtlasBuild",
+            fontsize = 12,
+            image = "/opt/homebrew/lib/node_modules/cdk-dia/icons/aws/Service/Arch_Developer- Tools/64/Arch_Amazon-CodeBuild_64@5x.png",
+            imagescale = "true",
+            imagepos = "tc",
+            penwidth = "0",
+            shape = "node",
+            fixedsize = "true",
+            labelloc = "b",
+            width = 1.2,
+            height = 1.682,
+          ];
+        }
+      }
+    }
+  }
+  "Eventbridge-Atlas-SANDBOX/DeploymentPipeline-SANDBOX/Pipeline" -> "Eventbridge-Atlas-SANDBOX/DeploymentPipeline-SANDBOX/CodeBuildActionRole" [
+    dir = "both",
+  ];
+  "Eventbridge-Atlas-SANDBOX/DeploymentPipeline-SANDBOX/Pipeline" -> "Eventbridge-Atlas-SANDBOX/DeploymentPipeline-SANDBOX/UpdatePipeline/SelfMutation" [
+    dir = "both",
+  ];
+  "Eventbridge-Atlas-SANDBOX/DeploymentPipeline-SANDBOX/CodeBuildActionRole" -> "Eventbridge-Atlas-SANDBOX/DeploymentPipeline-SANDBOX/Pipeline" [
+    dir = "both",
+  ];
+  "Eventbridge-Atlas-SANDBOX/DeploymentPipeline-SANDBOX/CodeBuildActionRole" -> "Eventbridge-Atlas-SANDBOX/DeploymentPipeline-SANDBOX/UpdatePipeline/SelfMutation" [
+    dir = "both",
+  ];
+  "Eventbridge-Atlas-SANDBOX/DeploymentPipeline-SANDBOX/UpdatePipeline/SelfMutation" -> "Eventbridge-Atlas-SANDBOX/DeploymentPipeline-SANDBOX/Pipeline" [
+    dir = "both",
+  ];
+  "Eventbridge-Atlas-SANDBOX/SANDBOX/Eventbridge-AtlasTask/EventBridgeAtlasFargate/ScheduledEventRule" -> "Eventbridge-Atlas-SANDBOX/SANDBOX/Eventbridge-AtlasTask/EventBridgeAtlasFargate/ScheduledTaskDef" [
+    dir = "both",
+  ];
+  "Eventbridge-Atlas-SANDBOX/SANDBOX/Eventbridge-AtlasTask/EventBridgeAtlasFargate/ScheduledTaskDef" -> "Eventbridge-Atlas-SANDBOX/SANDBOX/Eventbridge-AtlasTask/Eventbridge-Atlas-SANDBOX-bucket" [
+    dir = "both",
+  ];
+  "Eventbridge-Atlas-SANDBOX/SANDBOX/Eventbridge-AtlasTask/EventBridgeAtlasFargateService/Service" -> "Eventbridge-Atlas-SANDBOX/SANDBOX/Eventbridge-AtlasTask/EventBridgeAtlasFargate/ScheduledTaskDef" [
+    dir = "both",
+  ];
+  "Eventbridge-Atlas-SANDBOX/SANDBOX/Eventbridge-AtlasTask/EventBridgeAtlasFargateService/Service" -> "Eventbridge-Atlas-SANDBOX/SANDBOX/Eventbridge-AtlasTask/EventBridgeAtlasFargateService/SecurityGroup" [
+    dir = "both",
+  ];
+  "Eventbridge-Atlas-SANDBOX/SANDBOX/Eventbridge-AtlasBuildPipeline/SANDBOX-EventBridgeAtlasBuildPipeline" -> "Eventbridge-Atlas-SANDBOX/SANDBOX/Eventbridge-AtlasBuildPipeline/SANDBOX-EventBridgeAtlasBuildProject" [
+    dir = "both",
+  ];
+  "Eventbridge-Atlas-SANDBOX/SANDBOX/Eventbridge-AtlasBuildPipeline/SANDBOX-EventBridgeAtlasBuildProject" -> "Eventbridge-Atlas-SANDBOX/SANDBOX/Eventbridge-AtlasBuildPipeline/SANDBOX-EventBridgeAtlasBuildPipeline" [
+    dir = "both",
+  ];
+}
