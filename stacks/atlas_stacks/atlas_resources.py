@@ -58,6 +58,10 @@ class FargateService(Stack):
         
         #taking fargate task definition and making a service
         fargate_service = ecs.FargateService(self, 'EventBridgeAtlasFargateService', task_definition=fargate_task.task_definition,cluster=props['cluster'])
+
+        #make sure srvice can pull the repo
+        repository:ecr.Repository = props['ecr_repo']
+        repository.grant_pull(fargate_service.task_definition.execution_role)
         self.output_props = props.copy()
         self.output_props['ecs_service']=fargate_service
 
