@@ -36,13 +36,15 @@ class FargateService(Stack):
             f"{props['project']}-{props['environment']}-bucket",
             removal_policy=RemovalPolicy.DESTROY,
         )
+        repository = ecr.Repository(self, "Repository",
+            repository_name=f"{props['environment'].lower()}-eventbridge-atlas-repo")
         fargate_task = aws_cdk.aws_ecs_patterns.ScheduledFargateTask(
             self,
             "EventBridgeAtlasFargate",
             schedule=Schedule.cron(day='*',month='*',hour='*', minute='0'),
-            cluster=props['cluster'],
+            # cluster=props['cluster'],
             scheduled_fargate_task_image_options=ecs_patterns.ScheduledFargateTaskImageOptions(
-                image=ecs.ContainerImage.from_ecr_repository(props['ecr_repo']),
+                image=ecs.ContainerImage.from_ecr_repository(repository),
                 environment={
                     "EVENT_BUS_NAME": f"{props['environment']}-EventCentral",
                     "SCHEMA_REGISTRY_NAME": "discovered-schemas",
@@ -54,16 +56,16 @@ class FargateService(Stack):
         #granting permisions
         fargate_task.task_definition.execution_role.add_managed_policy(iam.ManagedPolicy.from_aws_managed_policy_name('AmazonEC2ContainerRegistryPowerUser'))
         # fargate_task.task_definition.execution_role.add_managed_policy(iam.ManagedPolicy.from_aws_managed_policy_name('AmazonECSTaskExecutionRolePolicy'))
-        s3bucket.grant_read_write(fargate_task.task_definition.execution_role)
+        s3bucket.grant_read_write(fargate_task.task_definition.obtain_execution_role())
         
-        #taking fargate task definition and making a service
-        fargate_service = ecs.FargateService(self, 'EventBridgeAtlasFargateService', task_definition=fargate_task.task_definition,cluster=props['cluster'])
+        # #taking fargate task definition and making a service
+        # fargate_service = ecs.FargateService(self, 'EventBridgeAtlasFargateService', task_definition=fargate_task.task_definition,cluster=props['cluster'])
 
         #make sure srvice can pull the repo
-        repository:ecr.Repository = props['ecr_repo']
-        repository.grant_pull(fargate_service.task_definition.execution_role)
+        props['ecr_repo'] = repository
+        repository.grant_pull(fargate_task.task_definition.obtain_execution_role())
         self.output_props = props.copy()
-        self.output_props['ecs_service']=fargate_service
+        # self.output_props['ecs_service']=fargate_service
 
     # pass objects to another stack
     @property

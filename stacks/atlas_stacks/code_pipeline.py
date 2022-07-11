@@ -1,12 +1,12 @@
 from os import name
 from aws_cdk import (
-    Stack, CfnOutput,
+    Stack,
     aws_ssm as ssm,
     aws_ec2 as ec2,
     aws_secretsmanager as secrets,
     aws_codepipeline as codepipeline,
     aws_codebuild as codebuild,
-    aws_codepipeline_actions as codepipeline_actions
+    aws_codepipeline_actions as codepipeline_actions,
 )
 from aws_cdk.aws_ecr import Repository
 from constructs import Construct
@@ -77,17 +77,18 @@ class CICDPipeline(Stack):
             actions=[build_action]
         )
 
-        deploy_stage = pipeline.add_stage(
-            stage_name="Deploy",
-            actions=[
-                codepipeline_actions.EcsDeployAction(
-                    action_name="EventBridgeAtlasDeployment",
-                    service=props['ecs_service'],
-                    # input=build_output,
-                    image_file=build_output.at_path("imagedefinitions.json")
-                ),
-            ]
-        )
+        # deploy_stage = pipeline.add_stage(
+        #     stage_name="Deploy",
+        #     actions=[
+        #         codepipeline_actions.EcsDeployAction(
+        #             action_name="EventBridgeAtlasDeployment",
+        #             service=props['ecs_service'],
+        #             # input=build_output,
+        #             image_file=build_output.at_path("imagedefinitions.json")
+        #         ),
+        #     ]
+        # )
+
 
         self.output_props = props.copy()
         self.output_props['pipeline'] = pipeline
