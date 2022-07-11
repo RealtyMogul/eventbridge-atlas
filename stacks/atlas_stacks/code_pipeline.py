@@ -25,7 +25,7 @@ class CICDPipeline(Stack):
         #creating a new pipeline
         pipeline = codepipeline.Pipeline(self, f"{props['environment']}-EventBridgeAtlasBuildPipeline",
             pipeline_name="EventBridgeAtlasBuildPipeline",
-            cross_account_keys=True)
+            cross_account_keys=False)
         #creating an s3 pipeline to store artifacts <- why are we storing artifacts? looks like this is just where we store our actions
         source_output = codepipeline.Artifact()
         #this allows connecting to github and bitbucket
@@ -47,7 +47,8 @@ class CICDPipeline(Stack):
         build_output = codepipeline.Artifact()
         #not sure, but i think this is grabbing all the creds to have a build project
         buildProject = codebuild.PipelineProject(self, f"{props['environment']}-EventBridgeAtlasBuildProject",
-            # vpc=imported_vpc,
+            vpc=imported_vpc,
+            subnet_selection=ec2.SubnetSelection(subnet_group_name="Application"),
             environment={
                 "privileged": True},
             project_name="EventBridgeAtlasBuild",

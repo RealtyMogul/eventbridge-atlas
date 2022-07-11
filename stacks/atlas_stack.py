@@ -14,7 +14,7 @@ class accountStacks(Stack):
     def __init__(self, scope: Construct, construct_id: str, env=None, props=None) -> None:
         super().__init__(scope, construct_id, env=env)
 
-        github_connection_arn = secrets.Secret.from_secret_name_v2(self, "github_arn", secret_name='github_arn').secret_value.unsafe_unwrap()
+        github_connection_arn = secrets.Secret.from_secret_name_v2(self, "github_arn", secret_name='github_arn').secret_value.to_string()
         docker_hub_secret = secrets.Secret.from_secret_name_v2(self, "dockerSecret", secret_name='dockerhubSecret')
 
         GeneralPipeline = pipelines.CodePipeline(self, f"DeploymentPipeline-{props['environment']}",
