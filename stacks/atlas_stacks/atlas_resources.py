@@ -42,7 +42,7 @@ class FargateService(Stack):
             schedule=Schedule.cron(day='*',month='*',hour='*', minute='0'),
             cluster=props['cluster'],
             scheduled_fargate_task_image_options=ecs_patterns.ScheduledFargateTaskImageOptions(
-                image=ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample"),
+                image=ecs.ContainerImage.from_ecr_repository(props['ecr_repo']),
                 environment={
                     "EVENT_BUS_NAME": f"{props['environment']}-EventCentral",
                     "SCHEMA_REGISTRY_NAME": "discovered-schemas",

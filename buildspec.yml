@@ -22,7 +22,7 @@ phases:
       - docker push $REPOSITORY_URI:latest
       - docker push $REPOSITORY_URI:$IMAGE_TAG
       - echo Writing image definitions file...
-      - echo '[{"name":"'$REPO_NAME'","imageUri":"'$REPOSITORY_URI:$IMAGE_TAG'"}]'
       - echo '[{"name":"'$REPO_NAME'","imageUri":"'$REPOSITORY_URI:$IMAGE_TAG'"}]' > imagedefinitions.json
+      - cat imagedefinitions.json
 artifacts:
     files: imagedefinitions.json
