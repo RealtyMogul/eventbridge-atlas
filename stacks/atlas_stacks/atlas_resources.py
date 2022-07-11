@@ -26,6 +26,7 @@ class FargateService(Stack):
     """
     Services created: s3bucket, ecr repo, fargate scheduled task
     """
+
     def __init__(self, scope: Construct, id: str, props, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
@@ -36,12 +37,10 @@ class FargateService(Stack):
             f"{props['project']}-{props['environment']}-bucket",
             removal_policy=RemovalPolicy.DESTROY,
         )
-        repository = ecr.Repository(self, "Repository",
-            repository_name=f"{props['environment'].lower()}-eventbridge-atlas-repo")
         fargate_task = aws_cdk.aws_ecs_patterns.ScheduledFargateTask(
             self,
             "EventBridgeAtlasFargate",
-            schedule=Schedule.cron(day='*',month='*',hour='*', minute='0'),
+            schedule=Schedule.cron(day="*", month="*", hour="*", minute="0"),
             # cluster=props['cluster'],
             scheduled_fargate_task_image_options=ecs_patterns.ScheduledFargateTaskImageOptions(
                 image=ecs.ContainerImage.from_ecr_repository(repository),
@@ -49,20 +48,30 @@ class FargateService(Stack):
                     "EVENT_BUS_NAME": f"{props['environment']}-EventCentral",
                     "SCHEMA_REGISTRY_NAME": "discovered-schemas",
                     "REGION": props["targetenv"]["region"],
-                    "BUCKET_NAME": s3bucket.bucket_name
+                    "BUCKET_NAME": s3bucket.bucket_name,
                 },
             ),
         )
-        #granting permisions
-        fargate_task.task_definition.execution_role.add_managed_policy(iam.ManagedPolicy.from_aws_managed_policy_name('AmazonEC2ContainerRegistryPowerUser'))
+        # granting permisions
+        fargate_task.task_definition.execution_role.add_managed_policy(
+            iam.ManagedPolicy.from_aws_managed_policy_name(
+                "AmazonEC2ContainerRegistryPowerUser"
+            )
+        )
         # fargate_task.task_definition.execution_role.add_managed_policy(iam.ManagedPolicy.from_aws_managed_policy_name('AmazonECSTaskExecutionRolePolicy'))
         s3bucket.grant_read_write(fargate_task.task_definition.obtain_execution_role())
-        
-        # #taking fargate task definition and making a service
-        # fargate_service = ecs.FargateService(self, 'EventBridgeAtlasFargateService', task_definition=fargate_task.task_definition,cluster=props['cluster'])
 
-        #make sure srvice can pull the repo
-        props['ecr_repo'] = repository
+        # #taking fargate task definition and making a service
+        fargate_service = ecs.FargateService(
+            self,
+            "EventBridgeAtlasFargateService",
+            task_definition=fargate_task.task_definition,
+            cluster=props["cluster"],
+            desired_count=0,
+        )
+
+        # make sure srvice can pull the repo
+        props["ecr_repo"] = repository
         repository.grant_pull(fargate_task.task_definition.obtain_execution_role())
         self.output_props = props.copy()
         # self.output_props['ecs_service']=fargate_service

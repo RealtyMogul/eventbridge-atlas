@@ -77,17 +77,17 @@ class CICDPipeline(Stack):
             actions=[build_action]
         )
 
-        # deploy_stage = pipeline.add_stage(
-        #     stage_name="Deploy",
-        #     actions=[
-        #         codepipeline_actions.EcsDeployAction(
-        #             action_name="EventBridgeAtlasDeployment",
-        #             service=props['ecs_service'],
-        #             # input=build_output,
-        #             image_file=build_output.at_path("imagedefinitions.json")
-        #         ),
-        #     ]
-        # )
+        deploy_stage = pipeline.add_stage(
+            stage_name="Deploy",
+            actions=[
+                codepipeline_actions.EcsDeployAction(
+                    action_name="EventBridgeAtlasDeployment",
+                    service=props['ecs_service'],
+                    # input=build_output,
+                    image_file=build_output.at_path("imagedefinitions.json")
+                ),
+            ]
+        )
 
 
         self.output_props = props.copy()
