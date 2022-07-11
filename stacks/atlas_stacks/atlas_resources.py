@@ -31,6 +31,7 @@ class FargateService(Stack):
         super().__init__(scope, id, **kwargs)
 
         self.output_props = props.copy()
+        repository = props["ecr_repo"]
 
         s3bucket = s3.Bucket(
             self,
@@ -71,7 +72,7 @@ class FargateService(Stack):
         )
 
         # make sure srvice can pull the repo
-        props["ecr_repo"] = repository
+        props["service"] = fargate_service
         repository.grant_pull(fargate_task.task_definition.obtain_execution_role())
         self.output_props = props.copy()
         # self.output_props['ecs_service']=fargate_service

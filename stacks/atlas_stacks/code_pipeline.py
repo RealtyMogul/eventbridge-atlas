@@ -48,7 +48,6 @@ class CICDPipeline(Stack):
         #not sure, but i think this is grabbing all the creds to have a build project
         buildProject = codebuild.PipelineProject(self, f"{props['environment']}-EventBridgeAtlasBuildProject",
             vpc=imported_vpc,
-            subnet_selection=ec2.SubnetSelection(subnet_group_name="Application"),
             environment={
                 "privileged": True},
             project_name="EventBridgeAtlasBuild",
@@ -82,7 +81,7 @@ class CICDPipeline(Stack):
             actions=[
                 codepipeline_actions.EcsDeployAction(
                     action_name="EventBridgeAtlasDeployment",
-                    service=props['ecs_service'],
+                    service=props['service'],
                     # input=build_output,
                     image_file=build_output.at_path("imagedefinitions.json")
                 ),
