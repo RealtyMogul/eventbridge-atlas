@@ -59,6 +59,28 @@ class FargateService(Stack):
                 "AmazonEC2ContainerRegistryPowerUser"
             )
         )
+        fargate_task.task_definition.add_to_execution_role_policy(iam.PolicyStatement(
+                resources=["*"],
+                effect=iam.Effect.ALLOW,
+                actions=[
+                    "schemas:ListSchemas",
+                    "schemas:ExportSchema",
+                    "schemas:DescribeSchema",
+                    "events:ListRules",
+                    "s3:*"
+                ],
+            ))
+        fargate_task.task_definition.add_to_task_role_policy(iam.PolicyStatement(
+                resources=["*"],
+                effect=iam.Effect.ALLOW,
+                actions=[
+                    "schemas:ListSchemas",
+                    "schemas:ExportSchema",
+                    "schemas:DescribeSchema",
+                    "events:ListRules",
+                    "s3:*"
+                ],
+            ))
         # fargate_task.task_definition.execution_role.add_managed_policy(iam.ManagedPolicy.from_aws_managed_policy_name('AmazonECSTaskExecutionRolePolicy'))
         s3bucket.grant_read_write(fargate_task.task_definition.obtain_execution_role())
 
