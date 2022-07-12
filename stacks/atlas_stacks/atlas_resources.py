@@ -51,6 +51,7 @@ class FargateService(Stack):
                     "REGION": props["targetenv"]["region"],
                     "BUCKET_NAME": s3bucket.bucket_name,
                 },
+                memory_limit_mib=1024
             ),
         )
         # granting permisions

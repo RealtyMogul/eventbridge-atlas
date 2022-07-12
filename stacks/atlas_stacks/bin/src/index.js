@@ -90,20 +90,31 @@ const init = async () => {
 
     // Use tools to build the documentation.
     // await build({ exec, buildDir })
+    
     const generator = new Generator('@asyncapi/html-template', buildDir, { forceWrite: true })
     // generator.generateFromString(eventsYml)
+    log('Generator created')
     try {
       await generator.generateFromFile(path.join(buildDir, '/events.yml'))
     } catch (error) {
+      log('we ran into an error generating documents')
       throw error
 
     }
     const cssDir = path.join(path.join(buildDir,'css'))
     const jsDir = path.join(path.join(buildDir,'js'))
+    log('uploading documents')
     upload(buildDir, 'index.html', BUCKET_NAME)
+    log("index.html uploaded")
     upload(cssDir, 'asyncapi.min.css', BUCKET_NAME)
+    log("'asyncapi.min.css' uploaded")
+
     upload(cssDir, 'global.min.css', BUCKET_NAME)
+    log("'global.min.css' uploaded")
+
     upload(jsDir, 'asyncapi-ui.min.js', BUCKET_NAME)
+    log("'asyncapi-ui.min.js' uploaded")
+
     log(
       `
 
