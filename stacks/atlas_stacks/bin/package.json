@@ -36,6 +36,8 @@
     "http-server": "^0.12.3",
     "json-schema-faker": "^0.5.0-rcv.35",
     "json2md": "^1.10.0",
+    "minipass-fetch": "^2.1.0",
+    "object-copy": "^1.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-flow-renderer": "^9.6.0",
